@@ -54,6 +54,7 @@
         <div class="mb-3">
             <label for="content" class="form-label">답변내용</label>
             <textarea
+                {% if not user.is_authenticated %}disabled{% endif %}
                 name="content"
                 id="content"
                 class="form-control"
