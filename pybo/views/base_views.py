@@ -26,9 +26,9 @@ def index(request):
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    answer_page = 1
+    answer_page = request.GET.get('answerPage', '1')  # 페이지
     
-    paginator = Paginator(question.answer_set.all(), 5)
+    paginator = Paginator(question.answer_set.all().order_by('-create_date'), 2)
     answer_page_obj = paginator.get_page(answer_page)
     
     context = {'question': question, 'answer_page': answer_page_obj}
