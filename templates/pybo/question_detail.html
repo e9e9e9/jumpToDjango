@@ -82,6 +82,50 @@
         </div>
     </div>
     {% endfor %}
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if answer_page.has_previous %}
+        <li class="page-item">
+            {% comment %} <a class="page-link" href="?page={{ question_list.previous_page_number }}">이전</a> {% endcomment %}
+            <a class="page-link" data-page="{{ question.id }}" data-answerPage="{{ answer_page.previous_page_number }}"
+            href="javascript:void(0)">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in answer_page.paginator.page_range %}
+            {% if page_number == answer_page.number %}
+                <li class="page-item active" aria-current="page">
+                    {% comment %} <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> {% endcomment %}
+                    <a class="page-link" data-page="{{  question.id }}" data-answerPage="{{ answer_page.number }}"
+                    href="javascript:void(0)">{{ answer_page.number  }}</a>
+                </li>
+                {% else %}
+                    <li class="page-item">
+                        {% comment %} <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> {% endcomment %}
+                        <a class="page-link" data-page="{{ page_number }}" data-answerPage="{{ answer_page.number }}"
+                    href="javascript:void(0)">{{ answer_page.number  }}</a>
+                    </li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if answer_page.has_next %}
+            <li class="page-item">
+                {% comment %} <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a> {% endcomment %}
+                <a class="page-link" data-page="{{ question.id }}" data-answerPage="{{ answer_page.next_page_number }}"
+            href="javascript:void(0)">다음</a>
+        </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
     <!-- 답변 등록 -->
     <form
         action="{% url 'pybo:answer_create' question.id %}"
@@ -133,5 +177,4 @@ Array.from(recommend_elements).forEach(function(element) {
         };
     });
 });
-</script>
 {% endblock %}
