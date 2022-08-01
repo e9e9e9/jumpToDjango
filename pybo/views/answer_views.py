@@ -47,6 +47,7 @@ def answer_modify(request, answer_id):
 
 @login_required(login_url='common:login')
 def answer_delete(request, answer_id):
+    print('delete')
     answer = get_object_or_404(Answer, pk=answer_id)
     if request.user != answer.author:
         messages.error(request, '삭제권한이 없습니다')
@@ -56,10 +57,15 @@ def answer_delete(request, answer_id):
 
 @login_required(login_url='common:login')
 def answer_vote(request, answer_id):
+    print(request.user);
     answer = get_object_or_404(Answer, pk=answer_id)
+    print(Answer.objects.filter(voter=request.user));
+
     if request.user == answer.author:
-        messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
+        messages.error(request, '본인이 작성한 글은 추천할 수 없습니다')
+    elif Answer.objects.filter(pk=answer_id).filter(voter=request.user):
+        answer.voter.remove(request.user)
     else:
         answer.voter.add(request.user)
     return redirect('{}#answer_{}'.format(
-                resolve_url('pybo:detail', question_id=answer.question.id), answer.id))
+        resolve_url('pybo:detail', question_id=answer.question.id), answer.id))
